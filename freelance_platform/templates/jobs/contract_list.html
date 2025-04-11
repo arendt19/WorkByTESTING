@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "My Contracts" %} | WorkBy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{% trans "My Contracts" %}</h1>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="nav nav-pills">
+            <a class="nav-link {% if active_tab == 'all' %}active{% endif %}" href="?tab=all">
+                {% trans "All" %} ({{ all_count }})
+            </a>
+            <a class="nav-link {% if active_tab == 'active' %}active{% endif %}" href="?tab=active">
+                {% trans "Active" %} ({{ active_count }})
+            </a>
+            <a class="nav-link {% if active_tab == 'completed' %}active{% endif %}" href="?tab=completed">
+                {% trans "Completed" %} ({{ completed_count }})
+            </a>
+        </div>
+    </div>
+    
+    {% if contracts %}
+        <div class="contract-list">
+            {% for contract in contracts %}
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <a href="{% url 'jobs:contract_detail' contract.pk %}" class="text-decoration-none">
+                                {{ contract.title }}
+                            </a>
+                        </h5>
+                        <span class="badge bg-{{ contract.status|slugify }}">
+                            {{ contract.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <strong>{% trans "Project" %}:</strong>
+                                    <a href="{% url 'jobs:project_detail' contract.project.pk %}">
+                                        {{ contract.project.title }}
+                                    </a>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>{% trans "Contract ID" %}:</strong> {{ contract.contract_id }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong>{% trans "Created" %}:</strong> {{ contract.created_at|date:"d M Y" }}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <strong>{% trans "Amount" %}:</strong> {{ contract.amount }} ₸
+                                </p>
+                                <p class="mb-1">
+                                    <strong>{% trans "Deadline" %}:</strong> {{ contract.deadline|date:"d M Y" }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong>{% trans "Freelancer" %}:</strong> 
+                                    <a href="{% url 'freelancer_detail' contract.freelancer.username %}">
+                                        {{ contract.freelancer.get_full_name|default:contract.freelancer.username }}
+                                    </a>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>{% trans "Client" %}:</strong> 
+                                    <a href="{% url 'client_detail' contract.client.username %}">
+                                        {{ contract.client.get_full_name|default:contract.client.username }}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p class="mb-3">{{ contract.description|truncatewords:40 }}</p>
+                        
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>{% trans "Milestones" %}:</strong> {{ contract.milestones.count }}
+                            </div>
+                            <div>
+                                <a href="{% url 'jobs:contract_detail' contract.pk %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye me-1"></i> {% trans "View Details" %}
+                                </a>
+                                
+                                {% if contract.status == 'active' %}
+                                    <a href="{% url 'jobs:milestone_create' contract.pk %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-plus me-1"></i> {% trans "Add Milestone" %}
+                                    </a>
+                                    
+                                    {% if user.id != contract.freelancer.id %}
+                                        <a href="{% url 'chat:start_conversation' contract.freelancer.id %}" class="btn btn-sm btn-outline-success">
+                                            <i class="fas fa-comment me-1"></i> {% trans "Message Freelancer" %}
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if user.id != contract.client.id %}
+                                        <a href="{% url 'chat:start_conversation' contract.client.id %}" class="btn btn-sm btn-outline-success">
+                                            <i class="fas fa-comment me-1"></i> {% trans "Message Client" %}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {% include 'includes/pagination.html' with page_obj=contracts %}
+    {% else %}
+        <div class="alert alert-info">
+            {% if active_tab == 'all' %}
+                {% trans "You don't have any contracts yet." %}
+            {% elif active_tab == 'active' %}
+                {% trans "You don't have any active contracts." %}
+            {% elif active_tab == 'completed' %}
+                {% trans "You don't have any completed contracts." %}
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

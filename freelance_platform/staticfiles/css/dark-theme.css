@@ -1,0 +1,302 @@
+/* Dark mode styles */
+:root.dark-theme {
+    --body-bg: #111111 !important;
+    --text-color: #FFFFFF !important;
+    --card-bg: #222222 !important;
+    --card-border: #333333 !important;
+    --navbar-bg: #111111 !important;
+    --footer-bg: #111111 !important;
+    --primary-color: #8B0000 !important;
+    --secondary-color: #B0B0B0 !important;
+    --success-color: #8B0000 !important;
+    --danger-color: #8B0000 !important;
+    --warning-color: #8B0000 !important;
+    --info-color: #B0B0B0 !important;
+    --input-bg: #222222 !important;
+    --input-border: #333333 !important;
+    --dropdown-bg: #222222 !important;
+    --dropdown-hover: #333333 !important;
+    --modal-bg: #222222 !important;
+    --table-border: #333333 !important;
+    --table-row-hover: #333333 !important;
+    --bg-light: #222222 !important;  /* Для элементов с классом bg-light */
+    --breadcrumb-bg: #222222 !important;
+    --counter-wrapper-bg: #222222 !important;
+    --text-muted: #B0B0B0 !important;
+}
+
+/* Body and general elements */
+.dark-theme body {
+    background-color: var(--body-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Navbar */
+.dark-theme .navbar {
+    background-color: var(--navbar-bg) !important;
+}
+
+.dark-theme .navbar-light {
+    background-color: var(--navbar-bg) !important;
+}
+
+.dark-theme .navbar-brand,
+.dark-theme .navbar-nav .nav-link {
+    color: var(--text-color) !important;
+}
+
+.dark-theme .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .dropdown-menu {
+    background-color: var(--dropdown-bg);
+    border-color: var(--card-border);
+}
+
+.dark-theme .dropdown-item {
+    color: var(--text-color);
+}
+
+.dark-theme .dropdown-item:hover {
+    background-color: var(--dropdown-hover);
+}
+
+/* Исправление для bg-light элементов */
+.dark-theme .bg-light {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Хлебные крошки */
+.dark-theme .breadcrumb {
+    background-color: var(--breadcrumb-bg);
+}
+
+/* Cards */
+.dark-theme .card {
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+    color: var(--text-color) !important;
+}
+
+.dark-theme .card-header, 
+.dark-theme .card-footer {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: var(--card-border) !important;
+}
+
+/* Tables */
+.dark-theme .table {
+    color: var(--text-color);
+}
+
+.dark-theme .table td, 
+.dark-theme .table th,
+.dark-theme .table thead th {
+    border-color: var(--table-border);
+}
+
+.dark-theme .table-hover tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+/* Forms */
+.dark-theme .form-control,
+.dark-theme .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+.dark-theme .form-control:focus,
+.dark-theme .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(77, 163, 255, 0.25);
+}
+
+.dark-theme .form-control::placeholder {
+    color: #999;
+}
+
+/* Кнопки формы */
+.dark-theme .input-group-text {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+/* Crispy Forms виджеты */
+.dark-theme .form-check-input {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+}
+
+.dark-theme label {
+    color: var(--text-color);
+}
+
+.dark-theme legend {
+    color: var(--text-color);
+}
+
+.dark-theme select option {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+/* Buttons */
+.dark-theme .btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.dark-theme .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.dark-theme .btn-light {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+/* Modals */
+.dark-theme .modal-content {
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+}
+
+.dark-theme .modal-header,
+.dark-theme .modal-footer {
+    border-color: var(--card-border) !important;
+}
+
+/* Footer */
+.dark-theme footer {
+    background-color: var(--footer-bg) !important;
+    color: var(--text-color);
+    border-top: 1px solid var(--card-border);
+}
+
+/* Links */
+.dark-theme a:not(.btn) {
+    color: var(--secondary-color) !important;
+}
+
+.dark-theme a:not(.btn):hover {
+    color: #FFFFFF !important;
+}
+
+/* Badges */
+.dark-theme .badge.bg-light {
+    background-color: #404040 !important;
+    color: var(--text-color);
+}
+
+/* Borders */
+.dark-theme .border {
+    border-color: var(--card-border) !important;
+}
+
+.dark-theme .border-top {
+    border-top-color: var(--card-border) !important;
+}
+
+.dark-theme .border-bottom {
+    border-bottom-color: var(--card-border) !important;
+}
+
+/* Alerts */
+.dark-theme .alert-info {
+    background-color: rgba(176, 176, 176, 0.2);
+    border-color: rgba(176, 176, 176, 0.3);
+    color: #FFFFFF;
+}
+
+/* Исправляем counter-wrapper в темной теме */
+.dark-theme .counter-wrapper {
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+}
+
+/* Исправляем текст в counter-label */
+.dark-theme .counter-label {
+    color: var(--text-color) !important;
+}
+
+/* Исправляем блоки с классом bg-light */
+.dark-theme .bg-light {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Исправляем text-muted */
+.dark-theme .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Исправляем карточки и их футеры */
+.dark-theme .card {
+    background-color: var(--card-bg) !important;
+    border-color: var(--card-border) !important;
+    color: var(--text-color) !important;
+}
+
+.dark-theme .card-footer, 
+.dark-theme .card-header {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: var(--card-border) !important;
+}
+
+/* Исправляем категории и иконки */
+.dark-theme .category-card {
+    background-color: var(--card-bg) !important;
+}
+
+.dark-theme .category-icon {
+    color: var(--primary-color) !important;
+}
+
+.dark-theme i.fas, 
+.dark-theme i.far, 
+.dark-theme i.fab, 
+.dark-theme i.bi {
+    color: inherit !important;
+}
+
+/* Исправляем навигацию и ссылки */
+.dark-theme .navbar-light {
+    background-color: var(--navbar-bg) !important;
+}
+
+.dark-theme .navbar-light .navbar-brand,
+.dark-theme .navbar-light .nav-link {
+    color: var(--text-color) !important;
+}
+
+/* Футер */
+.dark-theme footer.bg-light {
+    background-color: var(--footer-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Бэджи */
+.dark-theme .badge {
+    background-color: var(--primary-color) !important;
+}
+
+/* Профиль */
+.dark-theme .profile-header {
+    background-color: var(--card-bg) !important;
+}
+
+.dark-theme .stat-item {
+    background-color: var(--card-bg) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-theme .stat-item .stat-label {
+    color: var(--text-muted) !important;
+} 

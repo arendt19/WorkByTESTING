@@ -1,0 +1,1063 @@
+/* Основные стили для проекта WorkBy */
+
+/* Общие стили */
+:root {
+    /* Основная цветовая схема */
+    --primary-color: #8B0000;
+    --secondary-color: #6c757d;
+    --background-color: #FFFFFF;
+    --text-color: #1A1A1A;
+    
+    /* Семантические цвета UI */
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --success-color: #28a745;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Стили для карточек проектов */
+.project-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 1.5rem;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.project-card .card-footer {
+    padding: 0.75rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Стили для индикатора звезд рейтинга */
+.rating {
+    display: inline-block;
+}
+
+.rating .fa-star {
+    color: var(--primary-color);
+}
+
+.rating .fa-star-half-alt {
+    color: var(--primary-color);
+}
+
+.rating .fa-star.empty {
+    color: var(--secondary-color);
+}
+
+/* Стили для статуса проектов и предложений */
+.status-badge {
+    padding: 0.25em 0.6em;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+}
+
+.status-open {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.status-in-progress {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.status-completed {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-cancelled {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* Стили для чата */
+.chat-container {
+    height: 60vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    margin-bottom: 1rem;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    max-width: 75%;
+}
+
+.message.received {
+    background-color: #e9ecef;
+    align-self: flex-start;
+}
+
+.message.sent {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.message .sender {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #4a4a4a;
+    text-align: right;
+}
+
+.message.sent .message-time {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Стили для форм */
+.form-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Стили для профилей пользователей */
+.profile-header {
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    background-color: #fff;
+}
+
+.profile-avatar {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 64px;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.stat-item .count {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-item .stat-label {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Стили для индикаторов счетчиков */
+.message-badge, .notification-badge {
+    position: relative;
+    top: -8px;
+    left: -5px;
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Респонсивные стили */
+@media (max-width: 768px) {
+    .profile-header {
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Стили для главной страницы */
+.hero-section {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 5rem 0;
+    margin-bottom: 3rem;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.category-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Стили для карточек категорий */
+.category-card {
+    text-align: center;
+    padding: 2rem 1rem;
+    transition: transform 0.3s;
+    margin-bottom: 1.5rem;
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Стили для счетчиков на главной странице */
+.counter-wrapper {
+    padding: 3rem 0;
+    background-color: #f8f9fa;
+}
+
+.counter-item {
+    padding: 1.5rem;
+}
+
+.counter-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.counter-label {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Основные стили сайта */
+
+/* Для логотипа, если нет изображения */
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+.dark-theme .logo-text {
+    color: #FFFFFF;
+}
+
+/* Кастомные стили для карточек проектов */
+.project-card {
+    transition: all 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для профиля */
+.profile-header {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item .count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Стили для чата */
+.chat-container {
+    height: 60vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    max-width: 75%;
+}
+
+.message.received {
+    background-color: #e9ecef;
+    align-self: flex-start;
+}
+
+.message.sent {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #4a4a4a;
+    text-align: right;
+}
+
+.message.sent .message-time {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Стили для портфолио */
+.portfolio-image {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Стили для отзывов */
+.review-card {
+    border-left: 4px solid #0d6efd;
+    padding-left: 1rem;
+}
+
+.star-rating {
+    color: var(--primary-color);
+}
+
+/* Стили для кошелька */
+.wallet-card {
+    background: linear-gradient(135deg, var(--primary-color), #B0B0B0);
+    color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-list {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+/* Стили для фильтров проектов */
+.filter-sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+/* Стили для переключения языка */
+.language-form button.dropdown-item {
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+}
+
+.language-form button.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.language-form button.dropdown-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Отступы */
+.section-padding {
+    padding: 60px 0;
+}
+
+/* Кнопки */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #700000;
+    border-color: #700000;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.btn-success {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+/* Портфолио */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.portfolio-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Отзывы */
+.review-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.avatar-placeholder {
+    background-color: #e3e3e3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Прикрепленный футер */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Logo styling */
+.logo-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color) !important;
+    letter-spacing: 1px;
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+    border-color: #eee;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 600;
+    padding: 0.4em 0.6em;
+}
+
+/* Navbar styling */
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+/* Общие стили для ссылок */
+a {
+    color: #700000;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+a:hover {
+    color: #500000;
+}
+
+/* Стиль для навигационных ссылок */
+.navbar .nav-link {
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #444444;
+}
+
+.navbar .nav-link:hover {
+    text-decoration: none;
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Доп. стили для светлой темы */
+.navbar-light .navbar-nav .nav-link {
+    color: #3a3a3a;
+}
+
+/* Эффект при наведении на навигационные ссылки */
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-50%);
+}
+
+.navbar .nav-link:hover::after {
+    width: 70%;
+    opacity: 1;
+}
+
+/* Стили для логотипа */
+.navbar-brand {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.navbar-brand .logo-text {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+}
+
+/* Убираем подчеркивание для всех ссылок в футере */
+footer a:hover {
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+/* Стили для темной темы */
+.dark-theme .navbar .nav-link:hover {
+    color: #ffb6b6;
+}
+
+.dark-theme .navbar .nav-link::after {
+    background-color: #ffb6b6;
+}
+
+.dark-theme .navbar-brand:hover .logo-text {
+    text-shadow: 0 0 10px rgba(255, 182, 182, 0.5);
+}
+
+/* Принудительные стили для иконок в "How It Works" */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+/* Блок "Ready to get started?" */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* Стилизация иконок в категориях */
+.category-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color) !important;
+}
+
+/* Общие стили для всех иконок */
+.fas, .far, .fab, .bi {
+    color: inherit;
+}
+
+/* Принудительный стиль для синих элементов в темной теме */
+.dark-theme .text-primary {
+    color: var(--primary-color) !important;
+}
+
+/* Исправляем цвет кнопки в верхней части */
+.btn-light {
+    background-color: #FFFFFF !important;
+    color: var(--primary-color) !important;
+    border-color: #FFFFFF !important;
+}
+
+.btn-outline-light {
+    color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+/* Улучшенная контрастность для текста */
+.text-muted {
+    color: #4a4a4a !important;
+}
+
+/* Улучшаем читаемость текста в тёмных секциях */
+.py-5[style*="background-color: #8B0000"] p {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+/* Улучшаем контрастность для сообщений в чате */
+.chat-container {
+    background-color: #f0f0f0;
+}
+
+.message.received {
+    background-color: white;
+    color: #222;
+    border: 1px solid #ddd;
+}
+
+/* Улучшаем читаемость таблиц */
+table {
+    background-color: white;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Улучшаем контрастность для иконок в карточках */
+.card-body .text-primary {
+    color: #700000 !important;
+}
+
+/* Повышаем контрастность текста в темных секциях */
+.bg-dark {
+    background-color: #222 !important;
+}
+
+.bg-dark .text-muted {
+    color: #ddd !important;
+}
+
+.card-header.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* Стили для кнопок в навигационной панели */
+.navbar .btn.nav-link {
+    border: none;
+    background: transparent;
+}
+
+.navbar .btn.nav-link:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(0);
+}
+
+.navbar .btn.nav-link:hover::after {
+    width: 0;
+    opacity: 0;
+}
+
+/* Улучшение контрастности для кнопки Sign Up в навбаре */
+.navbar .nav-item .btn.btn-primary {
+    margin-left: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.navbar .nav-item .btn.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Дополнительные стили для лучшей читаемости в навигационной панели */
+.navbar-nav {
+    margin-left: 1rem;
+}
+
+/* Добавляем пространство между элементами меню в большей степени для лучшей читаемости */
+.nav-item {
+    margin: 0 0.25rem;
+}
+
+/* Дополнительно усиливаем контрастность текста в выпадающих меню */
+.dropdown-menu {
+    font-weight: 500;
+}
+
+.dropdown-item {
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Дополнительное улучшение видимости текста в навигационном меню */
+.navbar .navbar-nav .nav-link {
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.02rem;
+}
+
+/* Темная тема - улучшаем контраст текста в навбаре */
+.dark-theme .navbar .nav-link {
+    color: #f0f0f0;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Стили для страниц чата и уведомлений */
+.chat-container {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+}
+
+.dark-theme .chat-container {
+    background-color: #2a2a2a;
+    border-color: #444;
+}
+
+/* Стили для заголовков страниц (Your Conversations, Notifications) */
+.chat-header, .notifications-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 0;
+}
+
+.dark-theme .chat-header, .dark-theme .notifications-header {
+    background-color: #333;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Информационная панель в чате */
+.contact-info {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.dark-theme .contact-info {
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid #444;
+}
+
+/* Стили для аватара контакта */
+.contact-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #333;
+    margin: 0 auto 1rem;
+}
+
+.dark-theme .contact-avatar {
+    background-color: #444;
+    color: #f0f0f0;
+}
+
+/* Стили для списка сообщений */
+.messages-list, .notifications-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.messages-list li, .notifications-list li {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.dark-theme .messages-list li, .dark-theme .notifications-list li {
+    border-bottom-color: #444;
+}
+
+.messages-list li:hover, .notifications-list li:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .messages-list li:hover, .dark-theme .notifications-list li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Стили для заголовков в чате */
+.conversation-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.dark-theme .conversation-header {
+    background-color: #333;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.conversation-header .back-button {
+    margin-right: 1rem;
+    color: white;
+}
+
+/* Исправление для тёмной темы - чтобы заголовки не были красными */
+.dark-theme [style*="background-color: #8B0000"] {
+    background-color: #333 !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+/* Стили для сообщений в чате */
+.chat-message {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    max-width: 80%;
+}
+
+.dark-theme .chat-message {
+    background-color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.chat-message.outgoing {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.dark-theme .chat-message.outgoing {
+    background-color: #700000;
+}
+
+/* Исправление для django-crispy-forms */
+.crispy-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.crispy-form label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.crispy-form .asteriskField {
+    color: var(--danger-color);
+    margin-left: 3px;
+}
+
+.crispy-form .form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.dark-theme .crispy-form .form-text {
+    color: #adb5bd;
+}
+
+/* Общий фиксы для темы страниц */
+.bg-danger, .bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.dark-theme .bg-danger, .dark-theme .bg-primary {
+    background-color: #333 !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+/* Стилизация пользовательских аватаров */
+.user-avatar {
+    background-color: var(--secondary-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.dark-theme .user-avatar {
+    background-color: #444;
+}
+
+/* Дополнительные стили для исправления ошибки django-crispy-forms */
+.asteriskField {
+    color: var(--danger-color);
+    margin-left: 3px;
+}
+
+fieldset legend {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.help-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #6c757d;
+}
+
+.dark-theme .help-text {
+    color: #adb5bd;
+}
+
+.alert-error, .errorlist {
+    color: var(--danger-color);
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+}
+
+.alert-error li, .errorlist li {
+    margin-bottom: 0.25rem;
+}
+
+/* Исправление отображения ошибок в формах crispy */
+.invalid-feedback {
+    display: block;
+}
+
+.form-control.is-invalid {
+    border-color: var(--danger-color);
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.crispy-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Стили для элементов Crispy Forms */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.form-row > .col,
+.form-row > [class*="col-"] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.controls {
+    width: 100%;
+}
+
+.requiredField {
+    font-weight: 600;
+}
+
+/* Исправление для CrispyError на странице редактирования профиля */
+#div_id_first_name,
+#div_id_last_name,
+#div_id_bio,
+#div_id_avatar,
+#div_id_position,
+#div_id_company_name,
+#div_id_website,
+#div_id_specialization,
+#div_id_skills,
+#div_id_hourly_rate,
+#div_id_available_for_hire {
+    margin-bottom: 1.5rem;
+} 

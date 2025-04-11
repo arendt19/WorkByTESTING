@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Transactions" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'jobs:home' %}">{% trans "Home" %}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'payments:wallet' %}">{% trans "Wallet" %}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Transactions" %}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{% trans "Transaction History" %}</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Фильтры транзакций -->
+                    <form method="get" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="transaction_type" class="form-label">{% trans "Type" %}</label>
+                                <select name="transaction_type" id="transaction_type" class="form-select">
+                                    <option value="">{% trans "All Types" %}</option>
+                                    <option value="deposit" {% if request.GET.transaction_type == 'deposit' %}selected{% endif %}>{% trans "Deposit" %}</option>
+                                    <option value="withdrawal" {% if request.GET.transaction_type == 'withdrawal' %}selected{% endif %}>{% trans "Withdrawal" %}</option>
+                                    <option value="payment" {% if request.GET.transaction_type == 'payment' %}selected{% endif %}>{% trans "Payment" %}</option>
+                                    <option value="refund" {% if request.GET.transaction_type == 'refund' %}selected{% endif %}>{% trans "Refund" %}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status" class="form-label">{% trans "Status" %}</label>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="">{% trans "All Statuses" %}</option>
+                                    <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>{% trans "Completed" %}</option>
+                                    <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>{% trans "Pending" %}</option>
+                                    <option value="failed" {% if request.GET.status == 'failed' %}selected{% endif %}>{% trans "Failed" %}</option>
+                                    <option value="cancelled" {% if request.GET.status == 'cancelled' %}selected{% endif %}>{% trans "Cancelled" %}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_from" class="form-label">{% trans "From Date" %}</label>
+                                <input type="date" name="date_from" id="date_from" class="form-control" value="{{ request.GET.date_from }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_to" class="form-label">{% trans "To Date" %}</label>
+                                <input type="date" name="date_to" id="date_to" class="form-control" value="{{ request.GET.date_to }}">
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-1"></i> {% trans "Apply Filters" %}
+                                </button>
+                                <a href="{% url 'payments:transaction_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-1"></i> {% trans "Clear Filters" %}
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Таблица транзакций -->
+                    {% if transactions %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>{% trans "ID" %}</th>
+                                        <th>{% trans "Date" %}</th>
+                                        <th>{% trans "Description" %}</th>
+                                        <th>{% trans "Type" %}</th>
+                                        <th>{% trans "Amount" %}</th>
+                                        <th>{% trans "Status" %}</th>
+                                        <th>{% trans "Actions" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in transactions %}
+                                        <tr>
+                                            <td><small class="text-muted">{{ transaction.id }}</small></td>
+                                            <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
+                                            <td>{{ transaction.description }}</td>
+                                            <td>
+                                                {% if transaction.transaction_type == 'deposit' %}
+                                                    <span class="badge bg-success">{% trans "Deposit" %}</span>
+                                                {% elif transaction.transaction_type == 'withdrawal' %}
+                                                    <span class="badge bg-info">{% trans "Withdrawal" %}</span>
+                                                {% elif transaction.transaction_type == 'payment' %}
+                                                    <span class="badge bg-primary">{% trans "Payment" %}</span>
+                                                {% elif transaction.transaction_type == 'refund' %}
+                                                    <span class="badge bg-warning">{% trans "Refund" %}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="{% if transaction.is_incoming %}text-success{% else %}text-danger{% endif %}">
+                                                {% if transaction.is_incoming %}+{% else %}-{% endif %}{{ transaction.amount }} ₸
+                                            </td>
+                                            <td>
+                                                {% if transaction.status == 'completed' %}
+                                                    <span class="badge bg-success">{% trans "Completed" %}</span>
+                                                {% elif transaction.status == 'pending' %}
+                                                    <span class="badge bg-warning">{% trans "Pending" %}</span>
+                                                {% elif transaction.status == 'failed' %}
+                                                    <span class="badge bg-danger">{% trans "Failed" %}</span>
+                                                {% elif transaction.status == 'cancelled' %}
+                                                    <span class="badge bg-secondary">{% trans "Cancelled" %}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Пагинация -->
+                        {% if transactions.has_other_pages %}
+                            <nav aria-label="Transactions pagination" class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    {% if transactions.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ transactions.previous_page_number }}">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for i in transactions.paginator.page_range %}
+                                        {% if i > transactions.number|add:'-3' and i < transactions.number|add:'3' %}
+                                            <li class="page-item {% if i == transactions.number %}active{% endif %}">
+                                                <a class="page-link" href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ i }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if transactions.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}page={{ transactions.next_page_number }}">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-exchange-alt" style="font-size: 3rem; color: #ddd;"></i>
+                            </div>
+                            <h5>{% trans "No transactions found" %}</h5>
+                            <p class="text-muted">{% trans "Try changing your filter criteria or check back later" %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

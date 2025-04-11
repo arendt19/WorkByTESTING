@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Notifications" %} | WorkBy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Боковая панель навигации -->
+            <div class="list-group mb-4">
+                <a href="{% url 'chat:inbox' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope me-2"></i> {% trans "Messages" %}
+                </a>
+                <a href="{% url 'chat:notifications' %}" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-bell me-2"></i> {% trans "Notifications" %}
+                    <span class="badge bg-danger rounded-pill notification-badge float-end" id="notification-count">0</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header notifications-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{% trans "Notifications" %}</h5>
+                    <button class="btn btn-light btn-sm" id="markAllRead">
+                        <i class="fas fa-check-double me-1"></i> {% trans "Mark All as Read" %}
+                    </button>
+                </div>
+                
+                <div class="list-group list-group-flush notifications-list">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <a href="{% url 'chat:mark_notification_read' notification.pk %}" class="list-group-item list-group-item-action {% if not notification.is_read %}unread bg-light{% endif %}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if notification.notification_type == 'message' %}
+                                            <i class="fas fa-envelope me-2 text-primary"></i>
+                                        {% elif notification.notification_type == 'proposal' %}
+                                            <i class="fas fa-file-signature me-2 text-success"></i>
+                                        {% elif notification.notification_type == 'contract' %}
+                                            <i class="fas fa-handshake me-2 text-warning"></i>
+                                        {% elif notification.notification_type == 'milestone' %}
+                                            <i class="fas fa-flag me-2 text-danger"></i>
+                                        {% elif notification.notification_type == 'review' %}
+                                            <i class="fas fa-star me-2 text-info"></i>
+                                        {% endif %}
+                                        
+                                        {{ notification.content }}
+                                    </div>
+                                    <small class="text-muted">{{ notification.created_at|timesince }} {% trans "ago" %}</small>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <div class="list-group-item text-center py-5">
+                            <div class="py-4">
+                                <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                                <h5>{% trans "No notifications yet" %}</h5>
+                                <p class="text-muted">{% trans "When you have new notifications, they will appear here" %}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Функция для отметки всех уведомлений как прочитанных
+        $('#markAllRead').click(function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: '/chat/api/mark-all-read/',
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $('.unread').removeClass('unread bg-light');
+                    $('#notification-count').text('0').hide();
+                },
+                error: function(error) {
+                    console.error('Error marking notifications as read:', error);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %} 

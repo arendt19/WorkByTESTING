@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Wallet" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        transition: transform 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    .transaction-badge {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .badge-deposit {
+        background-color: #28a745;
+    }
+    .badge-withdrawal {
+        background-color: #dc3545;
+    }
+    .badge-payment {
+        background-color: #007bff;
+    }
+    .badge-refund {
+        background-color: #ffc107;
+    }
+    .badge-fee {
+        background-color: #6c757d;
+    }
+    .wallet-card-header {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+    }
+    .dark-theme .card {
+        background-color: #222222;
+        border-color: #333333;
+    }
+    .dark-theme .table-light {
+        background-color: #333;
+        color: #f0f0f0;
+    }
+    .dark-theme .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.075);
+    }
+    .dark-theme .text-muted {
+        color: #adb5bd !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'jobs:home' %}">{% trans "Home" %}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Wallet" %}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Баланс и действия -->
+    <div class="row mb-4">
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header wallet-card-header">
+                    <h5 class="mb-0">{% trans "Balance" %}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="balance-amount mb-3">
+                        <h2>{{ balance }} ₸</h2>
+                        <p class="text-muted">{% trans "Available Balance" %}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a href="{% url 'payments:deposit' %}" class="btn btn-success w-100">
+                                <i class="fas fa-plus-circle me-1"></i> {% trans "Deposit" %}
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{% url 'payments:withdraw' %}" class="btn btn-info w-100">
+                                <i class="fas fa-minus-circle me-1"></i> {% trans "Withdraw" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header wallet-card-header">
+                    <h5 class="mb-0">{% trans "Payment Methods" %}</h5>
+                </div>
+                <div class="card-body">
+                    {% if payment_methods %}
+                        <div class="list-group">
+                            {% for method in payment_methods %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        {% if method.type == 'card' %}
+                                            <i class="far fa-credit-card me-2"></i>
+                                        {% elif method.type == 'bank' %}
+                                            <i class="fas fa-university me-2"></i>
+                                        {% elif method.type == 'ewallet' %}
+                                            <i class="fas fa-wallet me-2"></i>
+                                        {% endif %}
+                                        {{ method.get_display_name }}
+                                    </div>
+                                    <div class="btn-group">
+                                        <a href="{% url 'payments:edit_payment_method' method.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'payments:delete_payment_method' method.id %}" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <p class="mb-3 text-muted">{% trans "No payment methods added" %}</p>
+                        </div>
+                    {% endif %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'payments:add_payment_method' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i> {% trans "Add Payment Method" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header wallet-card-header">
+                    <h5 class="mb-0">{% trans "Summary" %}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>{% trans "Total Earned" %}:</span>
+                        <span class="fw-bold text-success">{{ total_earned }} ₸</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>{% trans "Total Spent" %}:</span>
+                        <span class="fw-bold text-danger">{{ total_spent }} ₸</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>{% trans "Pending Payments" %}:</span>
+                        <span class="fw-bold text-warning">{{ pending_payments }} ₸</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>{% trans "Current Balance" %}:</span>
+                        <span>{{ balance }} ₸</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Последние транзакции -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm">
+                <div class="card-header wallet-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{% trans "Recent Transactions" %}</h5>
+                    <a href="{% url 'payments:transaction_list' %}" class="btn btn-sm btn-light">
+                        <i class="fas fa-list me-1"></i> {% trans "View All" %}
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    {% if transactions %}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>{% trans "Date" %}</th>
+                                        <th>{% trans "Description" %}</th>
+                                        <th>{% trans "Type" %}</th>
+                                        <th>{% trans "Amount" %}</th>
+                                        <th>{% trans "Status" %}</th>
+                                        <th>{% trans "Actions" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in transactions %}
+                                        <tr>
+                                            <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
+                                            <td>{{ transaction.description }}</td>
+                                            <td>
+                                                {% if transaction.transaction_type == 'deposit' %}
+                                                    <span class="badge bg-success">{% trans "Deposit" %}</span>
+                                                {% elif transaction.transaction_type == 'withdrawal' %}
+                                                    <span class="badge bg-info">{% trans "Withdrawal" %}</span>
+                                                {% elif transaction.transaction_type == 'payment' %}
+                                                    <span class="badge bg-primary">{% trans "Payment" %}</span>
+                                                {% elif transaction.transaction_type == 'refund' %}
+                                                    <span class="badge bg-warning">{% trans "Refund" %}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="{% if transaction.is_incoming %}text-success{% else %}text-danger{% endif %}">
+                                                {% if transaction.is_incoming %}+{% else %}-{% endif %}{{ transaction.amount }} ₸
+                                            </td>
+                                            <td>
+                                                {% if transaction.status == 'completed' %}
+                                                    <span class="badge bg-success">{% trans "Completed" %}</span>
+                                                {% elif transaction.status == 'pending' %}
+                                                    <span class="badge bg-warning">{% trans "Pending" %}</span>
+                                                {% elif transaction.status == 'failed' %}
+                                                    <span class="badge bg-danger">{% trans "Failed" %}</span>
+                                                {% elif transaction.status == 'cancelled' %}
+                                                    <span class="badge bg-secondary">{% trans "Cancelled" %}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'payments:transaction_detail' transaction.id %}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-exchange-alt" style="font-size: 3rem; color: #ddd;"></i>
+                            </div>
+                            <h5>{% trans "No transactions yet" %}</h5>
+                            <p class="text-muted">{% trans "Your transaction history will appear here" %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Скрипт для правильного применения темы к странице кошелька
+    document.addEventListener('DOMContentLoaded', function() {
+        function applyThemeToWallet() {
+            const isDarkTheme = document.documentElement.classList.contains('dark-theme');
+            const cards = document.querySelectorAll('.card');
+            const tableLight = document.querySelectorAll('.table-light');
+            const textMuted = document.querySelectorAll('.text-muted');
+            
+            if (isDarkTheme) {
+                cards.forEach(card => {
+                    card.style.backgroundColor = '#222222';
+                    card.style.borderColor = '#333333';
+                    card.style.color = '#FFFFFF';
+                });
+                
+                tableLight.forEach(header => {
+                    header.style.backgroundColor = '#333';
+                    header.style.color = '#f0f0f0';
+                });
+                
+                textMuted.forEach(text => {
+                    text.style.color = '#adb5bd';
+                });
+            } else {
+                cards.forEach(card => {
+                    card.style.backgroundColor = '';
+                    card.style.borderColor = '';
+                    card.style.color = '';
+                });
+                
+                tableLight.forEach(header => {
+                    header.style.backgroundColor = '';
+                    header.style.color = '';
+                });
+                
+                textMuted.forEach(text => {
+                    text.style.color = '';
+                });
+            }
+        }
+        
+        // Применяем тему при загрузке
+        applyThemeToWallet();
+        
+        // Добавляем обработчик для кнопки переключения темы
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                // Даем немного времени, чтобы тема переключилась
+                setTimeout(applyThemeToWallet, 50);
+            });
+        }
+    });
+</script>
+{% endblock %} 

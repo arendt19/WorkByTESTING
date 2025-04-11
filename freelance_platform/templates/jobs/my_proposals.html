@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "My Proposals" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">{% trans "My Proposals" %}</h1>
+    
+    <div class="mb-4">
+        <div class="btn-group" role="group">
+            <a href="{% url 'jobs:my_proposals' %}" class="btn {% if not request.GET.status %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {% trans "All" %}
+            </a>
+            <a href="{% url 'jobs:my_proposals' %}?status=pending" class="btn {% if request.GET.status == 'pending' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {% trans "Pending" %}
+            </a>
+            <a href="{% url 'jobs:my_proposals' %}?status=accepted" class="btn {% if request.GET.status == 'accepted' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {% trans "Accepted" %}
+            </a>
+            <a href="{% url 'jobs:my_proposals' %}?status=rejected" class="btn {% if request.GET.status == 'rejected' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {% trans "Rejected" %}
+            </a>
+            <a href="{% url 'jobs:my_proposals' %}?status=withdrawn" class="btn {% if request.GET.status == 'withdrawn' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {% trans "Withdrawn" %}
+            </a>
+        </div>
+    </div>
+    
+    {% if proposals %}
+        <div class="row">
+            {% for proposal in proposals %}
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">
+                                    <a href="{% url 'jobs:project_detail' pk=proposal.project.pk %}">{{ proposal.project.title }}</a>
+                                </h5>
+                                <span class="badge 
+                                    {% if proposal.status == 'pending' %}bg-warning
+                                    {% elif proposal.status == 'accepted' %}bg-success
+                                    {% elif proposal.status == 'rejected' %}bg-danger
+                                    {% elif proposal.status == 'withdrawn' %}bg-secondary
+                                    {% endif %}">
+                                    {{ proposal.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <p class="text-muted">
+                                <strong>{% trans "Client" %}:</strong> 
+                                <a href="{% url 'accounts:client_detail' username=proposal.project.client.username %}">
+                                    {{ proposal.project.client.username }}
+                                </a>
+                            </p>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <p><strong>{% trans "Your Bid" %}:</strong> ${{ proposal.bid_amount }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>{% trans "Delivery Time" %}:</strong> {{ proposal.delivery_time }} {% trans "days" %}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>{% trans "Submitted" %}:</strong> {{ proposal.created_at|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <a href="{% url 'jobs:proposal_detail' pk=proposal.pk %}" class="btn btn-outline-primary">
+                                    {% trans "View Details" %}
+                                </a>
+                                
+                                {% if proposal.status == 'pending' %}
+                                    <a href="{% url 'jobs:proposal_edit' pk=proposal.pk %}" class="btn btn-outline-secondary">
+                                        {% trans "Edit Proposal" %}
+                                    </a>
+                                    <a href="{% url 'jobs:proposal_withdraw' pk=proposal.pk %}" class="btn btn-outline-danger">
+                                        {% trans "Withdraw" %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <p>{% trans "You haven't submitted any proposals yet." %}</p>
+            <a href="{% url 'jobs:project_list' %}" class="btn btn-primary mt-2">
+                {% trans "Browse Projects" %}
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

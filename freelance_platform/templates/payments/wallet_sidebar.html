@@ -1,0 +1,70 @@
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">{% trans "My Wallet" %}</h5>
+    </div>
+    <div class="list-group list-group-flush">
+        <a href="{% url 'payments:wallet' %}" class="list-group-item list-group-item-action {% if active == 'overview' %}active{% endif %}">
+            <i class="fas fa-wallet me-2"></i> {% trans "Overview" %}
+        </a>
+        <a href="{% url 'payments:transaction_list' %}" class="list-group-item list-group-item-action {% if active == 'transactions' %}active{% endif %}">
+            <i class="fas fa-exchange-alt me-2"></i> {% trans "Transactions" %}
+        </a>
+        <a href="{% url 'payments:payment_methods' %}" class="list-group-item list-group-item-action {% if active == 'payment_methods' %}active{% endif %}">
+            <i class="fas fa-credit-card me-2"></i> {% trans "Payment Methods" %}
+        </a>
+        {% if user.user_type == 'freelancer' %}
+        <a href="{% url 'payments:withdraw' %}" class="list-group-item list-group-item-action {% if active == 'withdraw' %}active{% endif %}">
+            <i class="fas fa-money-bill-wave me-2"></i> {% trans "Withdraw Funds" %}
+        </a>
+        {% endif %}
+        {% if user.user_type == 'client' %}
+        <a href="{% url 'payments:deposit' %}" class="list-group-item list-group-item-action {% if active == 'deposit' %}active{% endif %}">
+            <i class="fas fa-arrow-alt-circle-up me-2"></i> {% trans "Add Funds" %}
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+{% if user.user_type == 'freelancer' %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">{% trans "Stats" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <span class="text-muted">{% trans "Total Earned" %}:</span>
+            <h5 class="mt-1">{{ stats.total_earned|default:0|floatformat:2 }} ₸</h5>
+        </div>
+        <div class="mb-3">
+            <span class="text-muted">{% trans "Pending Payment" %}:</span>
+            <h5 class="mt-1">{{ stats.pending_payment|default:0|floatformat:2 }} ₸</h5>
+        </div>
+        <div>
+            <span class="text-muted">{% trans "This Month" %}:</span>
+            <h5 class="mt-1">{{ stats.this_month|default:0|floatformat:2 }} ₸</h5>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if user.user_type == 'client' %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">{% trans "Stats" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <span class="text-muted">{% trans "Total Spent" %}:</span>
+            <h5 class="mt-1">{{ stats.total_spent|default:0|floatformat:2 }} ₸</h5>
+        </div>
+        <div class="mb-3">
+            <span class="text-muted">{% trans "Active Projects Value" %}:</span>
+            <h5 class="mt-1">{{ stats.active_projects_value|default:0|floatformat:2 }} ₸</h5>
+        </div>
+        <div>
+            <span class="text-muted">{% trans "This Month" %}:</span>
+            <h5 class="mt-1">{{ stats.this_month|default:0|floatformat:2 }} ₸</h5>
+        </div>
+    </div>
+</div>
+{% endif %} 

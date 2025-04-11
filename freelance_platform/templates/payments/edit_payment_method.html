@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Edit Payment Method" %} | WorkBy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Боковое меню кошелька -->
+        <div class="col-md-3">
+            {% include 'payments/wallet_sidebar.html' with active_tab='payment_methods' %}
+        </div>
+        
+        <!-- Содержимое -->
+        <div class="col-md-9">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{% trans "Edit Payment Method" %}</h4>
+                    <a href="{% url 'payments:payment_methods' %}" class="btn btn-sm btn-light">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back to Payment Methods" %}
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                {% if payment_method.method_type == 'card' %}
+                                    {% trans "You're editing card ending in" %} {{ payment_method.card_last4 }}.
+                                {% elif payment_method.method_type == 'bank' %}
+                                    {% trans "You're editing bank account" %} {{ payment_method.bank_name }}.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Отображаем разные поля в зависимости от типа метода оплаты -->
+                        {% if payment_method.method_type == 'card' %}
+                            <div class="mb-3">
+                                <label for="{{ form.nickname.id_for_label }}" class="form-label">{{ form.nickname.label }}</label>
+                                {{ form.nickname }}
+                                {% if form.nickname.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.nickname.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.expiry_month.id_for_label }}" class="form-label">{{ form.expiry_month.label }}</label>
+                                {{ form.expiry_month }}
+                                {% if form.expiry_month.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.expiry_month.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.expiry_year.id_for_label }}" class="form-label">{{ form.expiry_year.label }}</label>
+                                {{ form.expiry_year }}
+                                {% if form.expiry_year.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.expiry_year.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% elif payment_method.method_type == 'bank' %}
+                            <div class="mb-3">
+                                <label for="{{ form.nickname.id_for_label }}" class="form-label">{{ form.nickname.label }}</label>
+                                {{ form.nickname }}
+                                {% if form.nickname.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.nickname.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.bank_name.id_for_label }}" class="form-label">{{ form.bank_name.label }}</label>
+                                {{ form.bank_name }}
+                                {% if form.bank_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.bank_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.account_name.id_for_label }}" class="form-label">{{ form.account_name.label }}</label>
+                                {{ form.account_name }}
+                                {% if form.account_name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.account_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="form-check mb-3">
+                            {{ form.is_default }}
+                            <label for="{{ form.is_default.id_for_label }}" class="form-check-label">
+                                {{ form.is_default.label }}
+                            </label>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> {% trans "Save Changes" %}
+                            </button>
+                            <a href="{% url 'payments:delete_payment_method' payment_method.id %}" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> {% trans "Delete Method" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="small text-muted">
+                        <i class="bi bi-shield-lock"></i>
+                        {% trans "Your payment information is secured using industry-standard encryption." %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

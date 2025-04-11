@@ -1,0 +1,170 @@
+/* Стили для светлой темы */
+
+body.light-mode {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+/* Стили для навигационной панели в светлой теме */
+body.light-mode .navbar {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .navbar-light .navbar-brand {
+    color: #007bff;
+}
+
+body.light-mode .navbar-light .navbar-nav .nav-link {
+    color: #495057;
+}
+
+body.light-mode .navbar-light .navbar-nav .nav-link:hover,
+body.light-mode .navbar-light .navbar-nav .nav-link:focus {
+    color: #007bff;
+}
+
+/* Стили для карточек в светлой теме */
+body.light-mode .card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+body.light-mode .card-header {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+body.light-mode .card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Стили для футера в светлой теме */
+body.light-mode footer {
+    background-color: #f8f9fa !important;
+    color: #212529;
+}
+
+/* Стили для форм в светлой теме */
+body.light-mode .form-control {
+    background-color: #ffffff;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+body.light-mode .form-control:focus {
+    background-color: #ffffff;
+    border-color: #80bdff;
+    color: #212529;
+}
+
+/* Стили для кнопок в светлой теме */
+body.light-mode .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+body.light-mode .btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+body.light-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+body.light-mode .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+body.light-mode .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Стили для модальных окон в светлой теме */
+body.light-mode .modal-content {
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .modal-header {
+    border-bottom-color: #e9ecef;
+}
+
+body.light-mode .modal-footer {
+    border-top-color: #e9ecef;
+}
+
+/* Стили для сообщений чата в светлой теме */
+body.light-mode .chat-container {
+    background-color: #f8f9fa;
+}
+
+body.light-mode .message.received {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+/* Стили для статусов в светлой теме */
+body.light-mode .badge-light {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Стили для таблиц в светлой теме */
+body.light-mode .table {
+    color: #212529;
+}
+
+body.light-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+/* Стили для навигационных вкладок в светлой теме */
+body.light-mode .nav-tabs .nav-link {
+    color: #495057;
+}
+
+body.light-mode .nav-tabs .nav-link.active {
+    color: #007bff;
+    background-color: #ffffff;
+    border-color: #dee2e6 #dee2e6 #ffffff;
+}
+
+/* Стили для дропдаунов в светлой теме */
+body.light-mode .dropdown-menu {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .dropdown-item {
+    color: #212529;
+}
+
+body.light-mode .dropdown-item:hover,
+body.light-mode .dropdown-item:focus {
+    color: #16181b;
+    background-color: #f8f9fa;
+}
+
+/* Стили для профиля в светлой теме */
+body.light-mode .profile-header {
+    background-color: #f8f9fa;
+}
+
+body.light-mode .stat-item {
+    background-color: #ffffff;
+}
+
+/* Стили для разделителей в светлой теме */
+body.light-mode hr {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+} 

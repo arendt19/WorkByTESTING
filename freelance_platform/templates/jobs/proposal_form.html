@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if form.instance.id %}
+        {% trans "Edit Proposal" %}
+    {% else %}
+        {% trans "Submit Proposal" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">
+                {% if form.instance.id %}
+                    {% trans "Edit Your Proposal" %}
+                {% else %}
+                    {% trans "Submit a Proposal" %}
+                {% endif %}
+            </h1>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">{{ project.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>{% trans "Category" %}:</strong> {{ project.category.name }}</p>
+                    <p><strong>{% trans "Budget" %}:</strong> 
+                        {% if project.budget_type == 'fixed' %}
+                            {% trans "Fixed" %}: ${{ project.budget_min }} - ${{ project.budget_max }}
+                        {% else %}
+                            {% trans "Hourly" %}: ${{ project.budget_min }} - ${{ project.budget_max }}
+                        {% endif %}
+                    </p>
+                    <p><strong>{% trans "Client" %}:</strong> {{ project.client.username }}</p>
+                    <p><strong>{% trans "Posted" %}:</strong> {{ project.created_at|date:"M d, Y" }}</p>
+                    <hr>
+                    <h6>{% trans "Project Description" %}:</h6>
+                    <p>{{ project.description }}</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        {% if form.instance.id %}
+                            {% trans "Edit Your Proposal" %}
+                        {% else %}
+                            {% trans "Your Proposal" %}
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                {% if form.instance.id %}
+                                    {% trans "Update Proposal" %}
+                                {% else %}
+                                    {% trans "Submit Proposal" %}
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'jobs:project_detail' pk=project.pk %}" class="btn btn-outline-secondary">
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-header">
+                    <h5 class="mb-0">{% trans "Tips for a Great Proposal" %}</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <strong>{% trans "Be Clear and Concise" %}</strong>
+                            <p class="text-muted">{% trans "Explain why you're the right person for this job." %}</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <strong>{% trans "Set Realistic Expectations" %}</strong>
+                            <p class="text-muted">{% trans "Be honest about your delivery time and bid amount." %}</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <strong>{% trans "Show Relevant Experience" %}</strong>
+                            <p class="text-muted">{% trans "Highlight your skills and previous work related to this project." %}</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <strong>{% trans "Ask Questions" %}</strong>
+                            <p class="text-muted">{% trans "If something is unclear, include questions in your proposal." %}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

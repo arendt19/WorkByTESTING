@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Transaction Detail" %} | WorkBy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Боковое меню кошелька -->
+        <div class="col-md-3">
+            {% include 'payments/wallet_sidebar.html' with active_tab='transactions' %}
+        </div>
+        
+        <!-- Содержимое -->
+        <div class="col-md-9">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{% trans "Transaction Details" %}</h4>
+                    <a href="{% url 'payments:transaction_list' %}" class="btn btn-sm btn-light">
+                        <i class="bi bi-arrow-left"></i> {% trans "Back to Transactions" %}
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="transaction-details">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>{% trans "Transaction ID" %}:</strong> 
+                                <span class="badge bg-secondary">{{ transaction.id }}</span>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <strong>{% trans "Date" %}:</strong> 
+                                {{ transaction.created_at|date:"d.m.Y H:i" }}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>{% trans "Type" %}:</strong> 
+                                {% if transaction.transaction_type == 'deposit' %}
+                                    <span class="badge bg-success">{% trans "Deposit" %}</span>
+                                {% elif transaction.transaction_type == 'withdrawal' %}
+                                    <span class="badge bg-danger">{% trans "Withdrawal" %}</span>
+                                {% elif transaction.transaction_type == 'transfer' %}
+                                    <span class="badge bg-info">{% trans "Transfer" %}</span>
+                                {% elif transaction.transaction_type == 'payment' %}
+                                    <span class="badge bg-primary">{% trans "Payment" %}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ transaction.transaction_type }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <strong>{% trans "Status" %}:</strong> 
+                                {% if transaction.status == 'completed' %}
+                                    <span class="badge bg-success">{% trans "Completed" %}</span>
+                                {% elif transaction.status == 'pending' %}
+                                    <span class="badge bg-warning">{% trans "Pending" %}</span>
+                                {% elif transaction.status == 'failed' %}
+                                    <span class="badge bg-danger">{% trans "Failed" %}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ transaction.status }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>{% trans "Amount" %}:</strong> 
+                                <span class="fs-4 {% if transaction.transaction_type == 'deposit' or transaction.transaction_type == 'transfer_in' %}text-success{% elif transaction.transaction_type == 'withdrawal' or transaction.transaction_type == 'payment' or transaction.transaction_type == 'transfer_out' %}text-danger{% endif %}">
+                                    {% if transaction.transaction_type == 'deposit' or transaction.transaction_type == 'transfer_in' %}+{% elif transaction.transaction_type == 'withdrawal' or transaction.transaction_type == 'payment' or transaction.transaction_type == 'transfer_out' %}-{% endif %}{{ transaction.amount }} {{ transaction.currency }}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        {% if transaction.description %}
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>{% trans "Description" %}:</strong> 
+                                <p class="mt-2">{{ transaction.description }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if transaction.payment_method %}
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>{% trans "Payment Method" %}:</strong> 
+                                {{ transaction.payment_method.get_display_name }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if transaction.related_contract or transaction.related_milestone %}
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>{% trans "Related to" %}:</strong> 
+                                {% if transaction.related_contract %}
+                                    <a href="{% url 'contracts:detail' transaction.related_contract.id %}">
+                                        {% trans "Contract" %}: {{ transaction.related_contract.title }}
+                                    </a>
+                                {% endif %}
+                                
+                                {% if transaction.related_milestone %}
+                                    <a href="{% url 'contracts:detail' transaction.related_milestone.contract.id %}">
+                                        {% trans "Milestone" %}: {{ transaction.related_milestone.title }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if transaction.external_reference %}
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong>{% trans "External Reference" %}:</strong> 
+                                <code>{{ transaction.external_reference }}</code>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if transaction.status == 'pending' and transaction.transaction_type == 'withdrawal' and can_cancel %}
+                    <div class="mt-4 text-center">
+                        <form method="post" action="{% url 'payments:cancel_withdrawal' transaction.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> {% trans "Cancel Withdrawal" %}
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

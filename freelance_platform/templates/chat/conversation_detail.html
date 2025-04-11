@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Chat with" %} {{ other_participant.get_full_name|default:other_participant.username }} | WorkBy{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Боковая панель навигации -->
+            <div class="list-group mb-4">
+                <a href="{% url 'chat:inbox' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope me-2"></i> {% trans "Messages" %}
+                </a>
+                <a href="{% url 'chat:notifications' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-bell me-2"></i> {% trans "Notifications" %}
+                </a>
+            </div>
+            
+            <!-- Информация о собеседнике -->
+            <div class="card mb-4">
+                <div class="card-header chat-header">
+                    <h5 class="mb-0">{% trans "Contact Info" %}</h5>
+                </div>
+                <div class="card-body text-center contact-info">
+                    {% if other_participant.avatar %}
+                        <img src="{{ other_participant.avatar.url }}" alt="{{ other_participant.username }}" class="rounded-circle img-fluid mb-3" style="max-width: 120px;">
+                    {% else %}
+                        <div class="contact-avatar mx-auto">
+                            <span style="font-size: 3rem;">{{ other_participant.get_initials }}</span>
+                        </div>
+                    {% endif %}
+                    
+                    <h5>{{ other_participant.get_full_name|default:other_participant.username }}</h5>
+                    
+                    {% if other_participant.user_type == 'freelancer' %}
+                        <p class="text-muted">{% trans "Freelancer" %}</p>
+                        
+                        {% if other_participant.freelancer_profile.specialization %}
+                            <p class="badge bg-secondary">{{ other_participant.freelancer_profile.specialization }}</p>
+                        {% endif %}
+                        
+                        {% if other_participant.email %}
+                            <p><i class="fas fa-envelope me-2"></i> {{ other_participant.email }}</p>
+                        {% endif %}
+                        
+                        <a href="{% url 'accounts:freelancer_detail' other_participant.username %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-user me-1"></i> {% trans "View Profile" %}
+                        </a>
+                    {% else %}
+                        <p class="text-muted">{% trans "Client" %}</p>
+                        
+                        {% if other_participant.company_name %}
+                            <p><i class="fas fa-building me-2"></i> {{ other_participant.company_name }}</p>
+                        {% endif %}
+                        
+                        {% if other_participant.email %}
+                            <p><i class="fas fa-envelope me-2"></i> {{ other_participant.email }}</p>
+                        {% endif %}
+                        
+                        <a href="{% url 'accounts:client_detail' other_participant.username %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-user me-1"></i> {% trans "View Profile" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card">
+                <!-- Заголовок чата -->
+                <div class="card-header conversation-header">
+                    <a href="{% url 'chat:inbox' %}" class="text-white me-2 back-button" style="text-decoration: none;">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <h5 class="mb-0">
+                        {{ other_participant.get_full_name|default:other_participant.username }}
+                    </h5>
+                </div>
+                
+                <!-- Сообщения -->
+                <div class="card-body p-4 chat-container" id="message-container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="message-item mb-3 {% if message.sender == request.user %}text-end{% endif %}">
+                                <div class="chat-message {% if message.sender == request.user %}outgoing{% endif %} p-3 rounded d-inline-block">
+                                    {{ message.content|linebreaks }}
+                                </div>
+                                <div class="message-time mt-1">
+                                    <span>{{ message.created_at|time:"H:i" }}</span>
+                                    {% if message.sender == request.user %}
+                                        <span>
+                                            {% if message.is_read %}
+                                                <i class="fas fa-check-double text-primary" title="{% trans 'Read' %}"></i>
+                                            {% else %}
+                                                <i class="fas fa-check" title="{% trans 'Sent' %}"></i>
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">{% trans "No messages yet. Say hello!" %}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Форма отправки сообщения -->
+                <div class="card-footer p-3">
+                    <form method="post" id="message-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            {{ form.content }}
+                            <label for="image-upload" class="btn btn-outline-secondary" title="{% trans 'Attach Image' %}">
+                                <i class="fas fa-image"></i>
+                            </label>
+                            <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="image-preview" class="mt-2 d-none">
+                            <div class="d-flex align-items-center">
+                                <img src="" alt="Preview" class="img-thumbnail me-2" style="max-height: 60px;">
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="remove-image">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% if form.content.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.content.errors }}
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    #id_content {
+        border-radius: 20px 0 0 20px;
+        padding-left: 15px;
+    }
+    
+    .btn-primary {
+        border-radius: 0 20px 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Прокрутка чата вниз при загрузке страницы
+    var messageContainer = document.getElementById('message-container');
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+    
+    // Форма отправки сообщения
+    $('#message-form').submit(function() {
+        var content = $('#id_content').val().trim();
+        var hasImage = $('#image-upload').get(0).files.length > 0;
+        if (content === '' && !hasImage) {
+            return false;
+        }
+    });
+    
+    // Автоматическое изменение высоты поля ввода
+    $('#id_content').on('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+    
+    // Предпросмотр изображения
+    $('#image-upload').change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image-preview img').attr('src', e.target.result);
+                $('#image-preview').removeClass('d-none');
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+    
+    // Удаление изображения
+    $('#remove-image').click(function() {
+        $('#image-upload').val('');
+        $('#image-preview').addClass('d-none');
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 
