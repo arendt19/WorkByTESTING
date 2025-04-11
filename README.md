@@ -24,39 +24,116 @@ WorkBy - это современная фриланс-платформа, раз
 
 ## Установка и запуск
 
+### Общие шаги
+
 1. Клонировать репозиторий:
 ```
-git clone https://github.com/yourusername/workby.git
-cd workby
+git clone https://github.com/arendt19/WorkByTESTING.git
+cd WorkByTESTING
 ```
 
-2. Установить зависимости:
+### Для Windows
+
+1. **Установка Python** (если не установлен):
+   - Скачайте и установите Python 3.8+ с [python.org](https://www.python.org/downloads/windows/)
+   - При установке отметьте галочку "Add Python to PATH"
+
+2. **Создание виртуальной среды**:
+```
+python -m venv venv
+venv\Scripts\activate
+```
+
+3. **Установка зависимостей**:
 ```
 pip install -r requirements.txt
 ```
 
-3. Создать и применить миграции:
+4. **Миграции базы данных**:
 ```
-python manage.py makemigrations
+cd freelance_platform
 python manage.py migrate
 ```
 
-4. Создать суперпользователя:
+5. **Создание суперпользователя** (опционально):
 ```
 python manage.py createsuperuser
 ```
 
-5. Заполнить тестовыми данными (опционально):
+6. **Сбор статических файлов**:
 ```
-python -m freelance_core.create_test_data
+python manage.py collectstatic
 ```
 
-6. Запустить сервер разработки:
+7. **Запуск сервера**:
 ```
 python manage.py runserver
 ```
 
+### Для macOS
+
+1. **Установка Python** (если не установлен):
+   - Через Homebrew:
+   ```
+   brew install python
+   ```
+   - Или скачайте с [python.org](https://www.python.org/downloads/macos/)
+
+2. **Создание виртуальной среды**:
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. **Установка зависимостей**:
+```
+pip install -r requirements.txt
+```
+
+4. **Миграции базы данных**:
+```
+cd freelance_platform
+python manage.py migrate
+```
+
+5. **Создание суперпользователя** (опционально):
+```
+python manage.py createsuperuser
+```
+
+6. **Сбор статических файлов**:
+```
+python manage.py collectstatic
+```
+
+7. **Запуск сервера**:
+```
+python manage.py runserver
+```
+
+8. **Специфичные для macOS решения проблем**:
+
+   - Если возникают проблемы с правами доступа:
+   ```
+   chmod +x manage.py
+   ```
+
+   - Если возникают проблемы с пакетами с зависимостями от C-библиотек:
+   ```
+   brew install postgresql  # пример для PostgreSQL
+   ```
+
+   - Рекомендуется создать aliases для удобства (в файле ~/.zshrc или ~/.bash_profile):
+   ```
+   alias venv="source venv/bin/activate"
+   alias runserver="python manage.py runserver"
+   ```
+
 После этого сайт будет доступен по адресу: http://127.0.0.1:8000/
+
+## Доступ к админ-панели
+
+После запуска сервера, админ-панель доступна по адресу: http://127.0.0.1:8000/admin/
 
 ## Тестовые пользователи
 
@@ -64,6 +141,14 @@ python manage.py runserver
 
 - Фрилансеры: `freelancer1`, `freelancer2`, ... (пароль: `password123`)
 - Клиенты: `client1`, `client2`, ... (пароль: `password123`)
+
+## Создание тестовых данных (опционально)
+
+Чтобы заполнить базу данных тестовыми данными:
+
+```
+python -m freelance_core.create_test_data
+```
 
 ## Адаптация для Казахстана
 
